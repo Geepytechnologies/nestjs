@@ -4,7 +4,9 @@ import {
   Controller,
   Get,
   Post,
+  Res,
   UnauthorizedException,
+  UseGuards,
 } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import {
@@ -17,6 +19,8 @@ import { UserService } from 'src/user/user.service';
 import * as bcrypt from 'bcrypt';
 import { JwtService } from '@nestjs/jwt';
 import { ApiBody, ApiTags } from '@nestjs/swagger';
+import { AuthGuard } from './auth.guard';
+import { Response } from 'express';
 
 @ApiTags('Authentication')
 @Controller('auth')
@@ -70,5 +74,10 @@ export class AuthController {
       phone: user.phone,
       country: user.country,
     };
+  }
+  @Get('/validate')
+  @UseGuards(AuthGuard)
+  async validateToken(@Res() res: Response) {
+    return res.status(204).json();
   }
 }
