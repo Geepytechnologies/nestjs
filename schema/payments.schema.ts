@@ -4,7 +4,7 @@ import { User } from './user.schema';
 
 export type PaymentsDocument = HydratedDocument<Payments>;
 
-@Schema()
+@Schema({ timestamps: true })
 export class Payments {
   @Prop({ type: Types.ObjectId, ref: 'User' })
   user: User;

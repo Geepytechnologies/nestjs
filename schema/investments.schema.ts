@@ -6,12 +6,17 @@ import { Payments } from './payments.schema';
 export type InvestmentDocument = HydratedDocument<Investment>;
 
 enum InvestmentType {
-  private_equity = 'private equity',
-  fixed_portfolio = 'fixed portfolios',
-  digital_investing = 'digital invesing',
+  private_equity = 'Private Equity',
+  fixed_portfolio = 'Fixed Portfolios',
+  digital_investing = 'Digital Investing',
+}
+enum Status {
+  pending = 'pending',
+  confirmed = 'confirmed',
+  rejected = 'rejected',
 }
 
-@Schema()
+@Schema({ timestamps: true })
 export class Investment {
   @Prop({ type: Types.ObjectId, ref: 'User' })
   user: User;
@@ -19,8 +24,11 @@ export class Investment {
   @Prop({ type: String, enum: InvestmentType })
   type: string;
 
-  @Prop({ type: Types.ObjectId, ref: 'Payments' })
-  payment: Payments;
+  @Prop({ type: String, enum: Status, default: Status.pending })
+  status?: string;
+
+  @Prop({ type: Types.ObjectId, ref: 'Payments', required: false })
+  payment?: Payments;
 }
 
 export const InvestmentSchema = SchemaFactory.createForClass(Investment);
